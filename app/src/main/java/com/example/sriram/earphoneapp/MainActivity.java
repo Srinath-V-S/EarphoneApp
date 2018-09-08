@@ -12,7 +12,7 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView headsetpress;
+    TextView headsetpress,volume;
     ToggleButton toggle;
     AudioManager audioManager;
 
@@ -21,18 +21,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         headsetpress = (TextView)findViewById(R.id.hookpressevent);
+        volume = (TextView)findViewById(R.id.volume);
         toggle = (ToggleButton) findViewById(R.id.toggle);
         audioManager = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+
         toggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(toggle.isChecked()){
-                    audioManager.adjustVolume(AudioManager.ADJUST_MUTE,AudioManager.FLAG_PLAY_SOUND);
+                    volume.setText("Volume is " + audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),0);
+                    //audioManager.adjustVolume(AudioManager.ADJUST_MUTE,AudioManager.FLAG_PLAY_SOUND);
                 }
                 else{
-                    audioManager.setMicrophoneMute(false);
-
-                    audioManager.adjustVolume(AudioManager.ADJUST_UNMUTE,AudioManager.FLAG_PLAY_SOUND);
+                    volume.setText("Volume is 0");
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,0,0);
+                    //audioManager.adjustVolume(AudioManager.ADJUST_UNMUTE,AudioManager.FLAG_PLAY_SOUND);
                 }
             }
         });
